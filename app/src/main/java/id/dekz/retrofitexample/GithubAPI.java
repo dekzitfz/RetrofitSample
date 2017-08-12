@@ -3,6 +3,7 @@ package id.dekz.retrofitexample;
 import java.util.List;
 
 import id.dekz.retrofitexample.model.APIResponse;
+import id.dekz.retrofitexample.model.OpenWeatherModel;
 import id.dekz.retrofitexample.model.ReposResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -19,4 +20,7 @@ public interface GithubAPI {
 
     @GET("users/{username}/repos")
     Call<List<ReposResponse>> getReposOfUser(@Path("username") String username);
+
+    @GET("weather?q=settle&units=metric")
+    Call<OpenWeatherModel> getWeather();
 }

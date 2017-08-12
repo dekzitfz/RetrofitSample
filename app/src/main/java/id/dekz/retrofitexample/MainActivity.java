@@ -7,6 +7,7 @@ import android.util.Log;
 import java.util.List;
 
 import id.dekz.retrofitexample.model.APIResponse;
+import id.dekz.retrofitexample.model.OpenWeatherModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,19 +20,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         App.getClient().getApi()
-                .getUsers()
-                .enqueue(new Callback<List<APIResponse>>() {
+                .getWeather()
+                .enqueue(new Callback<OpenWeatherModel>() {
                     @Override
-                    public void onResponse(Call<List<APIResponse>> call, Response<List<APIResponse>> response) {
-                        List<APIResponse> data = response.body();
-                        for(APIResponse user : data){
-                            Log.i("user", user.getLogin());
-                        }
+                    public void onResponse(Call<OpenWeatherModel> call, Response<OpenWeatherModel> response) {
+                        Log.i("weather", response.body().getName());
                     }
 
                     @Override
-                    public void onFailure(Call<List<APIResponse>> call, Throwable t) {
-                        Log.e("error", t.getLocalizedMessage());
+                    public void onFailure(Call<OpenWeatherModel> call, Throwable t) {
+
                     }
                 });
     }
