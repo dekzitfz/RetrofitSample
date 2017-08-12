@@ -6,12 +6,10 @@ import android.util.Log;
 
 import java.util.List;
 
-import id.dekz.retrofitexample.model.ReposResponse;
+import id.dekz.retrofitexample.model.APIResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,27 +18,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        GithubAPI api = retrofit.create(GithubAPI.class);
-
-        api.getReposOfUser("mojombo")
-                .enqueue(new Callback<List<ReposResponse>>() {
+        App.getClient().getApi()
+                .getUsers()
+                .enqueue(new Callback<List<APIResponse>>() {
                     @Override
-                    public void onResponse(Call<List<ReposResponse>> call, Response<List<ReposResponse>> response) {
-                        if(response.body() != null){
-                            for (ReposResponse repo : response.body()){
-                                Log.i("repo", repo.getName());
-                            }
+                    public void onResponse(Call<List<APIResponse>> call, Response<List<APIResponse>> response) {
+                        List<APIResponse> data = response.body();
+                        for(APIResponse user : data){
+                            Log.i("user", user.getLogin());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<ReposResponse>> call, Throwable t) {
-
+                    public void onFailure(Call<List<APIResponse>> call, Throwable t) {
+                        Log.e("error", t.getLocalizedMessage());
                     }
                 });
     }
