@@ -1,7 +1,13 @@
 package id.dekz.retrofitexample;
 
-import java.io.IOException;
+import android.content.Context;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -17,10 +23,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private GithubAPI api;
+    private Context context;
 
-    public RetrofitClient() {
+    public RetrofitClient(Context context) {
+        this.context = context;
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
+                .baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient())
                 .build();
@@ -29,24 +38,49 @@ public class RetrofitClient {
     }
 
     private OkHttpClient getClient(){
+        File cacheFile = new File(context.getCacheDir(), "mycache");
+        int cacheSize = 10 * 1024 * 1024;
+        Cache myCache = new Cache(cacheFile, cacheSize);
+
         return new OkHttpClient.Builder()
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request req = chain.request();
-
-                        HttpUrl httpUrl = req.url().newBuilder()
-                                .addQueryParameter("appid", "83003ca00bb8eec11d7976f5ee0282fd")
-                                .build();
-
-                        req = req.newBuilder()
-                                .url(httpUrl)
-                                .build();
-
-                        return chain.proceed(req);
-                    }
-                })
+                .cache(myCache)
+                .addInterceptor(new OfflineInterceptor())
                 .build();
+    }
+
+    class OfflineInterceptor implements Interceptor{
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+                CacheControl cacheControl = new CacheControl.Builder()
+                        .maxStale(30, TimeUnit.SECONDS)
+                        .build();
+
+                request = request.newBuilder()
+                        .header("Cache-Control", cacheControl.toString())
+                        .build();
+
+            return chain.proceed(request);
+        }
+    }
+
+    class UrlInterceptor implements Interceptor{
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request req = chain.request();
+
+            HttpUrl httpUrl = req.url().newBuilder()
+                    .addQueryParameter("appid", "83003ca00bb8eec11d7976f5ee0282fd")
+                    .build();
+
+            req = req.newBuilder()
+                    .url(httpUrl)
+                    .build();
+
+            return chain.proceed(req);
+        }
     }
 
     public GithubAPI getApi() {

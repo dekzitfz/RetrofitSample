@@ -15,7 +15,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        client = new RetrofitClient();
+        client = new RetrofitClient(getApplicationContext());
     }
 
     public static RetrofitClient getClient() {
