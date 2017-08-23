@@ -5,6 +5,7 @@ import java.util.List;
 import id.dekz.retrofitexample.model.APIResponse;
 import id.dekz.retrofitexample.model.OpenWeatherModel;
 import id.dekz.retrofitexample.model.ReposResponse;
+import id.dekz.retrofitexample.model.weather.CurrentWeatherResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -22,5 +23,5 @@ public interface GithubAPI {
     Call<List<ReposResponse>> getReposOfUser(@Path("username") String username);
 
     @GET("weather?q=settle&units=metric")
-    Call<OpenWeatherModel> getWeather();
+    Call<CurrentWeatherResponse> getWeather();
 }
