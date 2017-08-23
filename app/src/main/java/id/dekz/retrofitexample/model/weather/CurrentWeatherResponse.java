@@ -152,7 +152,7 @@ public class CurrentWeatherResponse{
 	public String getReadableDate(){
 		Date date = new Date(dt * 1000L);
 		@SuppressLint("SimpleDateFormat")
-		DateFormat format = new SimpleDateFormat("EEEE, MMMM dd");
+		DateFormat format = new SimpleDateFormat("EEE");
 		return format.format(date);
 	}
 
