@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#09C"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:id="@+id/widget_root">
 
     <TextView
         android:id="@+id/widget_date"

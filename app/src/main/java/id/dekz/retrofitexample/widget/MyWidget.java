@@ -1,9 +1,11 @@
 package id.dekz.retrofitexample.widget;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -12,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import id.dekz.retrofitexample.MainActivity;
 import id.dekz.retrofitexample.R;
 import id.dekz.retrofitexample.data.WeatherContract;
 
@@ -34,6 +37,10 @@ public class MyWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.widget_date, readableDate+", ");
         views.setTextViewText(R.id.widget_desc, desc+", ");
         views.setTextViewText(R.id.widget_temp, String.valueOf(temp));
+
+        Intent main = new Intent(context, MainActivity.class);
+        PendingIntent pendingMain = PendingIntent.getActivity(context, 0, main, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.widget_root, pendingMain);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
