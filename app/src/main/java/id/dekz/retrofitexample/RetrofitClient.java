@@ -44,7 +44,7 @@ public class RetrofitClient {
 
         return new OkHttpClient.Builder()
                 .cache(myCache)
-                .addInterceptor(new OfflineInterceptor())
+                .addInterceptor(new UrlInterceptor())
                 .build();
     }
 
