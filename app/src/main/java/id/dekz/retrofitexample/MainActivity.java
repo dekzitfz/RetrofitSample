@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.jobdispatcher.Constraint;
@@ -18,6 +19,7 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import id.dekz.retrofitexample.data.WeatherContract;
@@ -32,44 +34,19 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn;
-    private EditText et;
-    private TextView tv;
+    private ListView lv;
+    private ListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn = (Button) findViewById(R.id.btn);
-        tv = (TextView) findViewById(R.id.tvResult);
-        et = (EditText) findViewById(R.id.etTotal);
+        lv = (ListView) findViewById(R.id.lv);
+        adapter = new ListAdapter();
+        lv.setAdapter(adapter);
+        adapter.setData(getDataString());
 
-        /*FirebaseJobDispatcher dispatcher =
-                new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
-
-        Job kerjaan = dispatcher.newJobBuilder()
-                .setService(MyJobService.class)
-                .setTag("myjob")
-                .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setLifetime(Lifetime.FOREVER)
-                .build();
-
-        dispatcher.mustSchedule(kerjaan);*/
-
-        /*Intent i = new Intent(this, MyIntentService.class);
-        i.putExtra("data", "data from activity");
-        startService(i);*/
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(et.getText().length() >0){
-                    int total = Integer.parseInt(et.getText().toString()) * 2500;
-                    tv.setText(String.valueOf(total));
-                }
-            }
-        });
 
         App.getClient().getApi()
                 .getWeather()
@@ -90,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
                         Log.w("warning", t.getLocalizedMessage());
                     }
                 });
+    }
+
+    private List<String> getDataString(){
+        List<String> data = new ArrayList<>();
+        data.add("Oreo");
+        data.add("Nougat");
+        data.add("Marshmallow");
+
+        return data;
     }
 
     private void saveToDB(CurrentWeatherResponse data){

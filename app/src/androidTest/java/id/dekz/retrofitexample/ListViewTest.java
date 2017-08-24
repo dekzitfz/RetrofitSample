@@ -7,30 +7,37 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 
 /**
  * Created by DEKZ on 8/24/2017.
  */
 
 @RunWith(AndroidJUnit4.class)
-public class OrderTest {
+public class ListViewTest {
 
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void testCalculate(){
-        String inputed = "3";
-        String resultExpected = "7500";
-        onView(withId(R.id.etTotal)).perform(typeText(inputed));
-        onView(withId(R.id.btn)).perform(click());
-        onView(withId(R.id.tvResult)).check(matches(withText(resultExpected)));
+    public void testList(){
+        onData(anything()).inAdapterView(withId(R.id.lv))
+                .atPosition(0)
+                .check(matches(hasDescendant(withText("Oreo"))));
+
+        onData(anything()).inAdapterView(withId(R.id.lv))
+                .atPosition(1)
+                .check(matches(hasDescendant(withText("Nougat"))));
+
+        onData(anything()).inAdapterView(withId(R.id.lv))
+                .atPosition(0)
+                .perform(click());
     }
 }
