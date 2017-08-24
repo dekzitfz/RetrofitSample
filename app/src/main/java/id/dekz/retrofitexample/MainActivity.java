@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -28,10 +31,16 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button btn;
+    private TextView tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btn = (Button) findViewById(R.id.btn);
+        tv = (TextView) findViewById(R.id.tvHello);
 
         /*FirebaseJobDispatcher dispatcher =
                 new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
@@ -48,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
         /*Intent i = new Intent(this, MyIntentService.class);
         i.putExtra("data", "data from activity");
         startService(i);*/
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv.setText("clicked");
+            }
+        });
 
         App.getClient().getApi()
                 .getWeather()
