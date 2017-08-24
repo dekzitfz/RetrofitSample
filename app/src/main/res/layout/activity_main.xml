@@ -9,15 +9,27 @@
     android:layout_height="match_parent"
     tools:context="id.dekz.retrofitexample.MainActivity">
 
-    <Button
-        android:id="@+id/btn"
-        android:text="button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/tvHello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Harga: Rp 2500" />
+
+    <EditText
+        android:hint="jumlah pesanan"
+        android:inputType="numberSigned"
+        android:id="@+id/etTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn"
+        android:text="pesan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

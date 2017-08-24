@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.firebase.jobdispatcher.Constraint;
@@ -32,6 +33,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private Button btn;
+    private EditText et;
     private TextView tv;
 
     @Override
@@ -40,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btn = (Button) findViewById(R.id.btn);
-        tv = (TextView) findViewById(R.id.tvHello);
+        tv = (TextView) findViewById(R.id.tvResult);
+        et = (EditText) findViewById(R.id.etTotal);
 
         /*FirebaseJobDispatcher dispatcher =
                 new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
@@ -61,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv.setText("clicked");
+                if(et.getText().length() >0){
+                    int total = Integer.parseInt(et.getText().toString()) * 2500;
+                    tv.setText(String.valueOf(total));
+                }
             }
         });
 

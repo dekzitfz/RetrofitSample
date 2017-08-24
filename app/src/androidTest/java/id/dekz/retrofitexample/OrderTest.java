@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -18,20 +19,18 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class HelloWorldTest {
+public class OrderTest {
 
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void validateHelloWorld(){
-        onView(withId(R.id.tvHello)).check(matches(withText("Hello World!")));
-    }
-
-    @Test
-    public void validateAfterClicked(){
+    public void testCalculate(){
+        String inputed = "3";
+        String resultExpected = "7500";
+        onView(withId(R.id.etTotal)).perform(typeText(inputed));
         onView(withId(R.id.btn)).perform(click());
-        onView(withId(R.id.tvHello)).check(matches(withText("clicked")));
+        onView(withId(R.id.tvResult)).check(matches(withText(resultExpected)));
     }
 }
