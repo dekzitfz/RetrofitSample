@@ -2,6 +2,10 @@ package id.dekz.retrofitexample;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,15 +42,31 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv;
     private ListAdapter adapter;
 
+    @Nullable
+    private MyIdlingRes idlingResource;
+
+    @VisibleForTesting
+    @NonNull
+    public MyIdlingRes getIdlingResource(){
+        if(idlingResource == null) idlingResource = new MyIdlingRes();
+        return idlingResource;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getIdlingResource();
+
         lv = (ListView) findViewById(R.id.lv);
         adapter = new ListAdapter();
         lv.setAdapter(adapter);
+        loadData();
+    }
 
+    private void loadData(){
+        idlingResource.setIdleState(false);
 
         App.getClient().getApi()
                 .getUsers()
@@ -58,10 +78,12 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(MainActivity.this, "response body is null!", Toast.LENGTH_SHORT).show();
                         }
+                        idlingResource.setIdleState(true);
                     }
 
                     @Override
                     public void onFailure(Call<List<APIResponse>> call, Throwable t) {
+                        idlingResource.setIdleState(true);
                         Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

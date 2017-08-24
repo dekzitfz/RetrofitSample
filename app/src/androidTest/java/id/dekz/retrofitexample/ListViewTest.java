@@ -1,8 +1,11 @@
 package id.dekz.retrofitexample;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,22 +25,27 @@ import static org.hamcrest.Matchers.anything;
 @RunWith(AndroidJUnit4.class)
 public class ListViewTest {
 
+    private MyIdlingRes idlingResource;
+
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void registerIdlingResource(){
+        idlingResource = rule.getActivity().getIdlingResource();
+        Espresso.registerIdlingResources(idlingResource);
+    }
+
+    @After
+    public void unregisterIdlingResource(){
+        if(idlingResource != null) Espresso.unregisterIdlingResources(idlingResource);
+    }
 
     @Test
     public void testList(){
         onData(anything()).inAdapterView(withId(R.id.lv))
                 .atPosition(0)
-                .check(matches(hasDescendant(withText("Oreo"))));
-
-        onData(anything()).inAdapterView(withId(R.id.lv))
-                .atPosition(1)
-                .check(matches(hasDescendant(withText("Nougat"))));
-
-        onData(anything()).inAdapterView(withId(R.id.lv))
-                .atPosition(0)
-                .perform(click());
+                .check(matches(hasDescendant(withText("mojombo"))));
     }
 }
