@@ -29,7 +29,7 @@ public class RetrofitClient {
         this.context = context;
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
+                .baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient())
                 .build();
@@ -44,7 +44,7 @@ public class RetrofitClient {
 
         return new OkHttpClient.Builder()
                 .cache(myCache)
-                .addInterceptor(new UrlInterceptor())
+                .addInterceptor(new OfflineInterceptor())
                 .build();
     }
 

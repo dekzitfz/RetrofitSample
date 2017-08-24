@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -45,37 +46,25 @@ public class MainActivity extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.lv);
         adapter = new ListAdapter();
         lv.setAdapter(adapter);
-        adapter.setData(getDataString());
 
 
         App.getClient().getApi()
-                .getWeather()
-                .enqueue(new Callback<CurrentWeatherResponse>() {
+                .getUsers()
+                .enqueue(new Callback<List<APIResponse>>() {
                     @Override
-                    public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
+                    public void onResponse(Call<List<APIResponse>> call, Response<List<APIResponse>> response) {
                         if(response.body()!=null){
-                            CurrentWeatherResponse data = response.body();
-                            Log.i("response", data.toString());
-                            saveToDB(data);
+                            adapter.setData(response.body());
                         }else{
-                            Log.w("warning", "body is null!");
+                            Toast.makeText(MainActivity.this, "response body is null!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
-                        Log.w("warning", t.getLocalizedMessage());
+                    public void onFailure(Call<List<APIResponse>> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private List<String> getDataString(){
-        List<String> data = new ArrayList<>();
-        data.add("Oreo");
-        data.add("Nougat");
-        data.add("Marshmallow");
-
-        return data;
     }
 
     private void saveToDB(CurrentWeatherResponse data){

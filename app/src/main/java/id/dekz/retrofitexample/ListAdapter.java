@@ -10,18 +10,21 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.dekz.retrofitexample.model.APIResponse;
+import id.dekz.retrofitexample.model.Owner;
+
 /**
  * Created by DEKZ on 8/24/2017.
  */
 
 public class ListAdapter extends BaseAdapter {
 
-    List<String> data = new ArrayList<>();
+    private List<APIResponse> data = new ArrayList<>();
 
     public ListAdapter() {
     }
 
-    public void setData(List<String> data) {
+    public void setData(List<APIResponse> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -44,7 +47,7 @@ public class ListAdapter extends BaseAdapter {
     @Override
     public View getView(int pos, View view, final ViewGroup viewGroup) {
         View v = view;
-        final String str = data.get(pos);
+        final String str = data.get(pos).getLogin();
         if(v == null) {
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_row, null);
         }
