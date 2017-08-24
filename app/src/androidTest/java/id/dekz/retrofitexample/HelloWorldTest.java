@@ -1,7 +1,9 @@
 package id.dekz.retrofitexample;
 
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 
 /**
@@ -10,5 +12,11 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class HelloWorldTest {
+
+    @Rule
+    public ActivityTestRule<MainActivity> rule =
+            new ActivityTestRule<>(MainActivity.class);
+
+
 
 }
